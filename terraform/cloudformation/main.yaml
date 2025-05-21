@@ -62,7 +62,7 @@ Parameters:
     ConstraintDescription: "CodeStar Connection ARN cannot be empty"
   RepositoryLocation:
     Type: String
-    Default: "https://github.com/aws-solutions-library-samples/guidance-for-game-server-hosting-using-agones-and-open-match-on-amazon-eks.git"
+    Default: "https://github.com/mohsen220/guidance-for-game-server-hosting-using-agones-and-open-match-on-amazon-eks.git"
     Description: "The location of the GitHub repository (required)"
     AllowedPattern: ".+"
     ConstraintDescription: "Repository Location cannot be empty"
@@ -99,7 +99,7 @@ Parameters:
     Default: aws-solutions-library-samples
     Description: "The owner of the Git repository (required)"
     AllowedPattern: ".+"
-    ConstraintDescription: "Repository Owner cannot be empty"  
+    ConstraintDescription: "Repository Owner cannot be empty"
   RepositoryName:
     Type: String
     Default: guidance-for-game-server-hosting-using-agones-and-open-match-on-amazon-eks
@@ -152,7 +152,7 @@ Resources:
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
       Source:
         Type: GITHUB
-        Location: !Ref RepositoryLocation        
+        Location: !Ref RepositoryLocation
         BuildSpec: terraform/cloudformation/buildspec.yml
 
   CodeBuildArtifactsBucket:
@@ -617,7 +617,7 @@ Resources:
     Properties:
       RoleName: !Sub EmptyS3BucketsRole-${AWS::Region}
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
@@ -626,33 +626,33 @@ Resources:
       Policies:
         - PolicyName: EmptyS3BucketsPolicy
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
-                  - 's3:ListBucket'
-                  - 's3:ListBucketVersions'
-                  - 's3:DeleteObject'
-                  - 's3:DeleteObjectVersion'
-                  - 's3:GetBucketLocation'
+                  - "s3:ListBucket"
+                  - "s3:ListBucketVersions"
+                  - "s3:DeleteObject"
+                  - "s3:DeleteObjectVersion"
+                  - "s3:GetBucketLocation"
                 Resource:
                   - !GetAtt CodeBuildArtifactsBucket.Arn
-                  - !Sub '${CodeBuildArtifactsBucket.Arn}/*'
+                  - !Sub "${CodeBuildArtifactsBucket.Arn}/*"
                   - !GetAtt TerraformStateBucket.Arn
-                  - !Sub '${TerraformStateBucket.Arn}/*'
-                  - 'arn:aws:s3:::agoe-artifacts-*'
-                  - 'arn:aws:s3:::agoe-artifacts-*/*'
+                  - !Sub "${TerraformStateBucket.Arn}/*"
+                  - "arn:aws:s3:::agoe-artifacts-*"
+                  - "arn:aws:s3:::agoe-artifacts-*/*"
               - Effect: Allow
                 Action:
-                  - 's3:ListBucketVersions'
-                Resource: 'arn:aws:s3:::agoe-artifacts-*'
+                  - "s3:ListBucketVersions"
+                Resource: "arn:aws:s3:::agoe-artifacts-*"
               - Effect: Allow
                 Action:
-                  - 'logs:CreateLogGroup'
-                  - 'logs:CreateLogStream'
-                  - 'logs:PutLogEvents'
-                  - 'logs:DeleteLogGroup'
-                Resource: 'arn:aws:logs:*:*:*'
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                  - "logs:DeleteLogGroup"
+                Resource: "arn:aws:logs:*:*:*"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
@@ -661,7 +661,7 @@ Resources:
     Properties:
       ServiceToken: !GetAtt EmptyS3BucketsFunction.Arn
       RoleName: !Ref EmptyS3BucketsRole
-      BucketsToEmpty: 
+      BucketsToEmpty:
         - !Ref CodeBuildArtifactsBucket
         - !Ref TerraformStateBucket
     DependsOn:
